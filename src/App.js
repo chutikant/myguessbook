@@ -1,16 +1,34 @@
 import React, { Component } from 'react';
-import Counter from './components/counter/Counter';
-import GuestBookApp from './components/GuestBookApp';
-import './App.css';
+import styled, {injectGlobal} from 'styled-components'
 
+import GuestBookApp from './components/GuestBookApp';
+injectGlobal`
+  body {
+    background: #ffffff;
+  }
+  /* p {
+    font-weight:bold;
+  } */
+`
+const Container = styled.div`
+  width:640px;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  background: ${(props) => props.background} 
+`
+Container.defaultProps = {
+  background: "yellow"
+}
 class App extends Component {
   render() {
     return (
-      <div className="App">
+      <Container background="#ffffff">
         <GuestBookApp />
-      </div>
+      </Container>
     );
   }
 }
+
+
 
 export default App;
