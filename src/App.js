@@ -6,9 +6,6 @@ injectGlobal`
   body {
     background: #ffffff;
   }
-  /* p {
-    font-weight:bold;
-  } */
 `
 const Container = styled.div`
   width:640px;
@@ -19,11 +16,12 @@ const Container = styled.div`
 Container.defaultProps = {
   background: "yellow"
 }
+
 class App extends Component {
   render() {
     return (
       <Container background="#ffffff">
-        <GuestBookApp />
+        <GuestBookApp/>
       </Container>
     );
   }
