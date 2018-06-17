@@ -26,7 +26,7 @@ class NewPostForm extends React.Component {
         })
         this.setState({
             inputValue: '',
-           textareaValue:''
+            textareaValue:''
         })
     }
 
