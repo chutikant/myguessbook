@@ -52,7 +52,6 @@ class Counter extends React.Component {
                 <h1>Counter</h1>           
                 <h1>n: {this.state.counter}</h1>
                 <MultiplyDisplay multiplier={this.state.power} number={this.state.counter} />    
-               
                 <PowerDisplay power={this.state.power} base={this.state.counter} />                
                               
                 <input type="text" value={this.state.counter} onChange={this.handleChange}/>                
