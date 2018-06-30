@@ -23,9 +23,20 @@ function postReducer(state = [], action) {
     }
 }
 
+function authReducer(state = {}, action) {
+    switch (action.type) {
+        case 'LOGIN_SUCCESS':
+            return {...state, token : action.token}
+        case 'LOGOUT': 
+            return {}
+        default:
+            return state;
+    }
+}
 const reducer = combineReducers({
     counter:counterReducer,
-    posts: postReducer
+    posts: postReducer,
+    auth: authReducer
 })
 
 export default reducer
