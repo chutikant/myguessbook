@@ -12,9 +12,12 @@ function counterReducer(state = 0, action) {
 
 function postReducer(state = [], action) {
     // console.log('postReducer', state)
+    //redux don't mutate old state you have to create a new one
     switch (action.type) {
         case 'CREATE_POST':
             return [...state, {_id:action._id, title: action.title, content: action.content }]
+        case 'RECEIVE_POST': 
+            return [...state, ...action.posts]
         default:
             return state;
     }

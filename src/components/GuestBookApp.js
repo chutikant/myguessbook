@@ -4,6 +4,7 @@ import NewPostForm from './NewPostForm';
 import FilterInput from './FilterInput';
 import FilterablePostList from './FilterablePostList'
 import {connect} from 'react-redux'
+import {createPost, receivePost, fetchPosts} from '../actions/posts'
 
 class GuestBookApp extends React.Component {
     state = {
@@ -12,15 +13,8 @@ class GuestBookApp extends React.Component {
     }
 
     handleOnCreatePost = ({ title, content }) => {
-        const _id = '' + Math.random()
-        const post = {
-            _id,
-            title,
-            content
-        }
        // const newPosts = [post, ...this.state.posts] //should create new array 
-        this.props.onCreatePost(post)
-       
+        this.props.onCreatePost(title, content)  //from mapDispatchToProps function
     }
     handleFilterInputChange = (e) => {
         this.setState({
@@ -30,16 +24,11 @@ class GuestBookApp extends React.Component {
 
     componentDidMount() {
         console.log(this.props)
-      
+       
         //fetch data when UI's complete rendered
         //fetch return promise
-        // fetch('http://localhost:3000/posts')
-        // .then(res => res.json())
-        // .then(json => {
-        //     this.setState({
-        //         posts: json
-        //     })
-        // })
+        this.props.fetchPosts() //from mapDispatchToProps function
+      
     }
 
     render() {
@@ -66,8 +55,12 @@ function mapStateToProps(state) {
 //return props for component
 function mapDispatchToProps(dispatch) {
     return {
-        onCreatePost: (post) => 
-          dispatch({type: 'CREATE_POST', ...post})
+        onCreatePost: (title,content) => {
+          dispatch(createPost(title,content))
+        },
+        fetchPosts: () => {
+            dispatch(fetchPosts())
+        }
     }
 }
 
