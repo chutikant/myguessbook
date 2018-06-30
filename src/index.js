@@ -9,6 +9,10 @@ import thunk from 'redux-thunk'
 
 import Cookies from 'universal-cookie'
 
+import { ApolloProvider } from 'react-apollo'
+import createApolloClient from './libs/createApolloClient'
+
+
 const cookie = new Cookies()
 const token = cookie.get('token')
 // const store = createStore(reducer, 
@@ -23,11 +27,14 @@ const token = cookie.get('token')
      )
     ) 
 
+const client = createApolloClient(store)
 
 ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
+    <ApolloProvider client={client}>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </ApolloProvider>,
     document.getElementById('root'));
 //registerServiceWorker();
 

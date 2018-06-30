@@ -2,6 +2,13 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {loginSuccess, logout} from '../actions/auth'
 import {withRouter} from 'react-router-dom'
+import {Mutation, graphql} from 'react-apollo'
+import gql from 'graphql-tag'
+
+const loginMutation = gql`
+    mutation login($username: String!, $password: String!) {
+       token:  login(username:$username, password: $password) 
+    }`
 class LoginForm extends React.Component {
 
     state = {
@@ -46,29 +53,44 @@ class LoginForm extends React.Component {
             )
         }
         return (
-        <React.Fragment>
-        <h1>Login Form</h1>
-        <form onSubmit={this.handleSubmit}>
-        <div>
-            <input
-                value={this.state.username}
-                onChange={this.handleUsernameChange}
-                type="text"
-                name="create-title"
-                placeholder="Username" />
-    
-     
-            <input
-                value={this.state.password}
-                onChange={this.handlePasswordChange}
-                type="password"
-                name="create-title"
-                placeholder="Password" />
-       
-        <button type="submit">sign in</button>
-        </div>
-        </form>
-        </React.Fragment>
+        <Mutation mutation={loginMutation}>
+           {(mutateFn, result) => {
+               return (
+                <form onSubmit={async (e) => {
+                    e.preventDefault()
+                    const result = await mutateFn({
+                        variables: {
+                            username: this.state.username, //key habe to match $username
+                            password: this.state.password
+                        }
+                    })
+                    console.log(result)
+                    this.props.onLoginSuccess(result.data.token)
+                }}>
+                    <div>
+                        <input
+                            value={this.state.username}
+                            onChange={this.handleUsernameChange}
+                            type="text"
+                            name="create-title"
+                            placeholder="Username" />
+                
+                
+                        <input
+                            value={this.state.password}
+                            onChange={this.handlePasswordChange}
+                            type="password"
+                            name="create-title"
+                            placeholder="Password" />
+                
+                        <button type="submit">sign in</button>
+                    </div>
+                </form>
+               )
+           }
+
+           }
+        </Mutation>
         )
     }
 }
