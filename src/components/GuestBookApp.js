@@ -36,7 +36,6 @@ class GuestBookApp extends React.Component {
         //return boolean if true ==> push to new array
         return (
             <React.Fragment>
-                <LoginForm />
                 <h1>My Guest Book</h1>
                 <NewPostForm onCreatePost={this.handleOnCreatePost} />
                 <input value={this.state.filterText} onChange={this.handleFilterInputChange} />

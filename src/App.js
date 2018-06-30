@@ -26,11 +26,11 @@ class App extends Component {
         <Container background="#ffffff">
           {/* <GuestBookApp/> */}
           <div>
-            <Link to="/home">Home</Link> / 
+            <Link to="/">Home</Link> / 
             <Link to="/login">Login</Link>
           </div>
           <Switch>
-            <Route exect path="/" component={HomePage} />
+            <Route exact path="/" component={HomePage} />
             <Route path="/login" component={LoginPage} />
           </Switch>
         </Container>
