@@ -20,7 +20,6 @@ export function logout() {
     return (dispatch) => {
         const cookies = new Cookies()
         cookies.remove('token',  {path: '/'});
-       
         dispatch(
             {
                 type: 'LOGOUT',

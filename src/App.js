@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import styled, {injectGlobal} from 'styled-components'
-
+import styled, { injectGlobal } from 'styled-components'
+import { BrowserRouter, Route, Switch, Link } from 'react-router-dom'
 import GuestBookApp from './components/GuestBookApp';
+import HomePage from './pages/Home';
+import LoginPage from './pages/Login';
 injectGlobal`
   body {
     background: #ffffff;
@@ -20,9 +22,19 @@ Container.defaultProps = {
 class App extends Component {
   render() {
     return (
-      <Container background="#ffffff">
-        <GuestBookApp/>
-      </Container>
+      <BrowserRouter>
+        <Container background="#ffffff">
+          {/* <GuestBookApp/> */}
+          <div>
+            <Link to="/home">Home</Link> / 
+            <Link to="/login">Login</Link>
+          </div>
+          <Switch>
+            <Route exect path="/" component={HomePage} />
+            <Route path="/login" component={LoginPage} />
+          </Switch>
+        </Container>
+      </BrowserRouter>
     );
   }
 }
