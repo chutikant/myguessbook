@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import withApollo from '../libs/withApollo'
 import {ApolloProvider} from 'react-apollo'
+import {Provider} from 'react-redux'
 
 class MyApp extends App {
 //getInitiall by withApollo instead below code
@@ -20,21 +21,23 @@ class MyApp extends App {
 
   render () {
     // const {Component, pageProps} = this.props
-    const {Component, pageProps, apolloClient} = this.props
+    const {Component, pageProps, apolloClient, reduxStore} = this.props
     return ( 
-        <ApolloProvider client={apolloClient}>
-        <Container>
-            <div>
-                <Link href="/">
-                    <a>Home</a>
-                </Link>
-                <Link href="/about">
-                    <a>About</a>
-                </Link>
-            </div>
-            <Component {...pageProps} />
-        </Container>
-        </ApolloProvider>
+        <Provider store={reduxStore}>
+            <ApolloProvider client={apolloClient}>
+                <Container>
+                    <div>
+                        <Link href="/">
+                            <a>Home</a>
+                        </Link>
+                        <Link href="/about">
+                            <a>About</a>
+                        </Link>
+                    </div>
+                    <Component {...pageProps} />
+                </Container>
+            </ApolloProvider>
+        </Provider>
     )
   }
 }

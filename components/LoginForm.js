@@ -1,7 +1,8 @@
 import React from 'react'
 import {connect} from 'react-redux'
 import {loginSuccess, logout} from '../actions/auth'
-import {withRouter} from 'react-router-dom'
+//import {withRouter} from 'react-router-dom'
+import {withRouter} from 'next/router'
 import {Mutation, graphql} from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -114,7 +115,8 @@ function mapDispatchToProps(dispatch, ownProps) {
     return {
         onLoginSuccess: (token) => {
             dispatch(loginSuccess(token))
-            ownProps.history.replace('/')
+            ownProps.router.replace('/')
+           // ownProps.history.replace('/')
         },
         onLogout:() => {
             dispatch(logout())
