@@ -19,8 +19,8 @@ const PostItemBox = styled.div`
 class PostListItem extends React.Component {
     render() {
         return (
-            <React.Fragment>
-                <PostItemBox>
+            <React.Fragment >
+                <PostItemBox  >
                     <h4 className="post-title">{this.props.post.title}</h4>
                     <p>{this.props.post.content}</p>
                 </PostItemBox>

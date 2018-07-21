@@ -64,7 +64,12 @@ class LoginForm extends React.Component {
                             password: this.state.password
                         }
                     })
-                    console.log(result)
+                    //console.log(result)
+                    
+                    if(!result.data.token) {
+                        return alert('Login Failed!')
+                    }
+
                     this.props.onLoginSuccess(result.data.token)
                 }}>
                     <div>

@@ -31,6 +31,6 @@ export function fetchPosts() {
 
         })
         //dispatch 
-        console.log(getState)
+       // console.log(getState)
     }
 }

@@ -1,12 +1,12 @@
 import React from 'react'
 import gql from 'graphql-tag'
-import {Query, graphql, Mutation} from 'react-apollo'
+import { Query, graphql, Mutation } from 'react-apollo'
 import PostList from './PostList'
 import NewPostForm from './NewPostForm'
+import { subscribe } from 'graphql';
 
-const createPostMutation = gql`
- mutation createPost($data: PostData!) {
-    post: createPost(data:$data) {
+const _postFragment = gql`
+    fragment postFragment on Post {
       id
       title
       tags {
@@ -14,59 +14,75 @@ const createPostMutation = gql`
             },
       content
     }
-  }`
+`
+const createPostMutation = gql`
+    mutation createPost($data: PostData!) {
+        post: createPost(data:$data) {
+            ...postFragment
+        }
+    }
+    ${_postFragment}
+  `
 const postsQuery = gql`
     query listPost {
         posts {
-            id,
-            title,
-            tags {
-                name
-            },
-            content
+            ...postFragment
         }
     }
+    ${_postFragment}
+`
+
+const postCreatedSubscription = gql`
+    subscription postCreated {
+        postCreated {
+            ...postFragment
+        }
+    }
+    ${_postFragment}
 `
 
 
 class GuestBookApollo extends React.Component {
-   
+
+    componentDidMount() {
+        this.props.subscribe()
+    }
+
     render() {
-        console.log(this.props)
+        //console.log(this.props)
         if (this.props.loading) {
             return <div>Loading..</div>
         }
         return (
             <React.Fragment>
-                <Mutation 
-                    mutation={createPostMutation} 
-                    update={(cache,result) => {
-                        console.log('ggggg',result)
-                        const {posts} = cache.readQuery({query: postsQuery});
+                <Mutation
+                    mutation={createPostMutation}
+                    update={(cache, result) => {
+                        const { posts } = cache.readQuery({ query: postsQuery });
                         const newPosts = [...posts, result.data.post]
                         cache.writeQuery({
                             query: postsQuery,
-                            data: {posts: newPosts}
+                            data: { posts: newPosts }
 
                         })
                     }}
                 >
-                {createPostMutate => {
-                    return (
-                        <NewPostForm onCreatePost={(data)=>{
-                            const variables = {data}
-                            createPostMutate({
-                                variables
-                            })
+                    {createPostMutate => {
+                        return (
+                            <NewPostForm onCreatePost={(data) => {
+                                const variables = { data }
+                                createPostMutate({
+                                    variables
+                                })
 
-                        }} />
-                    )
-                }}
-                
+                            }} />
+                        )
+                    }}
+
                 </Mutation>
-                <PostList posts={this.props.posts}/>
+                <PostList posts={this.props.posts} />
             </React.Fragment>
-        
+
         )
     }
 }
@@ -76,10 +92,34 @@ class GuestBookApollo extends React.Component {
 export default graphql(postsQuery, {
     //result from graphql
     props: (result) => {
-        console.log(result)
+        //console.log(result)
         return {
             posts: result.data.posts,
-            loading: result.data.loading
+            loading: result.data.loading,
+
+            //1
+            subscribe: () => {
+                result.data.subscribeToMore({
+                    document: postCreatedSubscription,
+                    updateQuery: (prev, { subscriptionData }) => {
+                        // 1. check
+                        //console.log('ddddd',prev, subscriptionData)
+                        if (!subscriptionData.data.postCreated) return prev
+
+                        // 2. Post Data
+                        const postCreated = subscriptionData.data.postCreated
+
+                        // if(prev.propts.includes((post) => post.id === postCreated.id)) {
+                        //     return 
+                        // }
+
+                        // 3. New Result
+                        return Object.assign({}, prev, {
+                            posts: [...prev.posts, postCreated]
+                        })
+                    }
+                })
+            }
         }
     }
 })(GuestBookApollo)

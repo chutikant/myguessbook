@@ -24,7 +24,7 @@ class GuestBookApp extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props)
+        //console.log(this.props)
        
         //fetch data when UI's complete rendered
         //fetch return promise
