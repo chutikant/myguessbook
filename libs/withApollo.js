@@ -50,7 +50,7 @@ export default (App) => {
 
     constructor (props) {
       super(props)
-      this.apolloClient = createApolloClient()
+      this.apolloClient = createApolloClient(undefined, props.apolloState)
     }
 
     render () {

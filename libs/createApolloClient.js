@@ -36,14 +36,14 @@ function applyWsLink(httpLink) {
   return link
 }
 
-function createApolloClient(store) {
+function createApolloClient(store, initialState = {}) {
   const httpLink = new HttpLink({
     uri: 'http://localhost:3000/graphql'
   })
 
   const authLink = setContext((_, { headers }) => {
     if(!store) {
-      return {header}
+      return {headers}
     }
     const state = store.getState()
     const token = state.auth.token
@@ -65,7 +65,7 @@ function createApolloClient(store) {
 
   const client = new ApolloClient({
     link: link,
-    cache: new InMemoryCache()
+    cache: new InMemoryCache().restore(initialState)
   });
 
 
