@@ -7,7 +7,13 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { getMainDefinition } from 'apollo-utilities';
 //import { HttpLink } from 'apollo-link-http';
 
+import 'isomorphic-unfetch';
+
 function applyWsLink(httpLink) {
+  
+  if(!process.browser) {
+    return httpLink
+  }
   const wsLink = new WebSocketLink({
     uri: `ws://localhost:3000/subscriptions`,
     options: {
@@ -36,6 +42,9 @@ function createApolloClient(store) {
   })
 
   const authLink = setContext((_, { headers }) => {
+    if(!store) {
+      return {header}
+    }
     const state = store.getState()
     const token = state.auth.token
     if (!token) {

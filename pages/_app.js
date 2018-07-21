@@ -1,9 +1,14 @@
 import App, {Container} from 'next/app'
 import Link from 'next/link'
 import React from 'react'
+import withApollo from '../libs/withApollo'
+import {ApolloProvider} from 'react-apollo'
 
-export default class MyApp extends App {
-  static async getInitialProps ({ Component, router, ctx }) {
+class MyApp extends App {
+//getInitiall by withApollo instead below code
+
+/** 
+    static async getInitialProps ({ Component, router, ctx }) {
     let pageProps = {}
 
     if (Component.getInitialProps) {
@@ -11,11 +16,13 @@ export default class MyApp extends App {
     }
 
     return {pageProps}
-  }
+  }  **/
 
   render () {
-    const {Component, pageProps} = this.props
+    // const {Component, pageProps} = this.props
+    const {Component, pageProps, apolloClient} = this.props
     return ( 
+        <ApolloProvider client={apolloClient}>
         <Container>
             <div>
                 <Link href="/">
@@ -27,6 +34,9 @@ export default class MyApp extends App {
             </div>
             <Component {...pageProps} />
         </Container>
+        </ApolloProvider>
     )
   }
 }
+
+export default withApollo(MyApp)
